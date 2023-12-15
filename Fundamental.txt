@@ -1,0 +1,5 @@
+Keep the server on
+
+node instead of nodemon 
+
+23:08 5th video

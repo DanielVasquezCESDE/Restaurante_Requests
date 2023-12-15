@@ -28,7 +28,7 @@ const dbConfig = {
   host: '127.0.0.1',
   user: 'root',
   password: '',
-  database: 'restaunrate_node',
+  database: 'restaurante_node',
   charset: 'utf8mb4',
 };
 

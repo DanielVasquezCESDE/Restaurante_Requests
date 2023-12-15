@@ -1,3 +1,5 @@
+                        //Waiters
+
 let d = document;
 let tablas = d.querySelectorAll(".table > tbody");
 
@@ -8,7 +10,7 @@ d.addEventListener("DOMContentLoaded", function () {
 
 //Obtener pedidos de la base de datos
 async function ObtenerPedidosDB () {
-    const url = "http://localhost:3005/chef"
+    const url = "http://localhost:3005/mesero"
     let respuesta = await fetch(url, {
         method: "GET",
         headers: {
@@ -21,11 +23,12 @@ async function ObtenerPedidosDB () {
     }
 
     const datos = await respuesta.json();
-
+    console.log(datos)
     //console.log(datos.dataPorPreparar);
-    const { dataPorPreparar, dataPreparando, dataPorEntregar} = datos;
-    console.log(dataPorPreparar)
-    dataPorPreparar.forEach((platillo, i) => {
+    const {dataPorEntregar, dataEntregado} = datos;
+    console.log(dataPorEntregar)
+
+    dataPorEntregar.forEach((platillo, i) => {
         let fila = d.createElement("tr");
         fila.innerHTML = `
             <td> ${ platillo.platillo } </td>
@@ -36,43 +39,23 @@ async function ObtenerPedidosDB () {
         tablas[0].appendChild(fila);
     });
 
-    dataPreparando.forEach((platillo, i) => {
+    dataEntregado.forEach((platillo, i) => {
         let fila = d.createElement("tr");
         fila.innerHTML = `
             <td> ${ platillo.platillo } </td>
             <td>
-                <button onclick="actualizarPedido(${platillo.id}, 'preparando')" class="btn-editar btn btn-primary" type="button"></button>
+                <button onclick="actualizarPedido(${platillo.id})" class="btn-editar btn btn-primary" type="button"></button>
             </td>
         `
         tablas[1].appendChild(fila);
     });
 
-    dataPorEntregar.forEach((platillo, i) => {
-        let fila = d.createElement("tr");
-        fila.innerHTML = `
-            <td> ${ platillo.platillo } </td>
-            <td>
-                <button onclick="actualizarPedido(${platillo.id}, 'por_entregar')" class="btn-editar btn btn-primary" type="button"></button>
-            </td>
-        `
-        tablas[2].appendChild(fila);
-    });
-}
-    
-async function actualizarPedido (id, estado = "por preparar") {
-    let url;
-    let url1 = "http://localhost:3005/preparando/"+id;
-    let url2 = "http://localhost:3005/listo/"+id;
 
-    switch (estado) {
-        case "prep":
-            url = url2;
-            break;
-        
-        default:
-            url = url1;
-            break;
-    }
+}
+
+async function actualizarPedido (id) {
+
+    let url = "http://localhost:3005/entregado/"+id;
 
     const respuesta = await fetch(url, {
         method: "PUT",
@@ -93,3 +76,4 @@ async function actualizarPedido (id, estado = "por preparar") {
     alert(mensaje);
     location.reload()
 }
+    
